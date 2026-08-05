@@ -1,0 +1,32 @@
+type Query {
+    "Fetch a single claim by its numeric id."
+    claim(id: ID!): Claim
+    "List all claims, newest first."
+    claims: [Claim!]!
+}
+
+type Claim {
+    id: ID!
+    claimNumber: String!
+    policyNumber: String!
+    claimantName: String!
+    type: ClaimType!
+    description: String
+    amount: Float!
+    status: ClaimStatus!
+    rejectionReason: String
+}
+
+enum ClaimType {
+    AUTO
+    HOME
+    HEALTH
+    LIFE
+    TRAVEL
+}
+
+enum ClaimStatus {
+    SUBMITTED
+    APPROVED
+    REJECTED
+}

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: claim-notification-service
+
+server:
+  port: 8081
+
+logging:
+  level:
+    io.claimflow.notifications: INFO
