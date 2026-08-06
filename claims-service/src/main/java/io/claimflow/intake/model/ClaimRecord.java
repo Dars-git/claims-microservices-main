@@ -91,6 +91,10 @@ public class ClaimRecord {
         rejectionReason = explanation;
     }
 
+    public boolean isPending() {
+        return status == ProcessingState.SUBMITTED;
+    }
+
     public Long id() {
         return id;
     }

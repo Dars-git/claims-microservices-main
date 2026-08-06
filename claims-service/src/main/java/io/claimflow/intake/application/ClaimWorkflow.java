@@ -80,7 +80,7 @@ public class ClaimWorkflow {
     }
 
     private void ensurePending(ClaimRecord current, String operation) {
-        if (current.state() != ProcessingState.SUBMITTED) {
+        if (!current.isPending()) {
             throw new ClaimTransitionException(
                     "Cannot " + operation + " claim " + current.reference()
                             + " in status " + current.state());
