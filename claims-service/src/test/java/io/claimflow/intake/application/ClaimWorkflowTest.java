@@ -3,7 +3,6 @@ package io.claimflow.intake.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,12 +35,15 @@ class ClaimWorkflowTest {
     @Mock
     private ClaimEventGateway eventGateway;
 
+    @Mock
+    private ClaimReferenceFactory referenceFactory;
+
     @InjectMocks
     private ClaimWorkflow workflow;
 
     @Test
     void filingPersistsPendingClaimAndDispatchesEvent() {
-        when(catalog.existsByClaimNumber(anyString())).thenReturn(false);
+        when(referenceFactory.create()).thenReturn("CLM-12345678");
         when(catalog.save(any(ClaimRecord.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         ClaimRecord result = workflow.file(new FileClaimCommand(

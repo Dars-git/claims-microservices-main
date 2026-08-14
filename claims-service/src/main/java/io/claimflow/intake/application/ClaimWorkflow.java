@@ -12,7 +12,6 @@ import io.claimflow.intake.model.ClaimRecord;
 import io.claimflow.intake.persistence.ClaimCatalog;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +21,19 @@ public class ClaimWorkflow {
 
     private final ClaimCatalog catalog;
     private final ClaimEventGateway eventGateway;
+    private final ClaimReferenceFactory referenceFactory;
 
-    public ClaimWorkflow(ClaimCatalog catalog, ClaimEventGateway eventGateway) {
+    public ClaimWorkflow(ClaimCatalog catalog, ClaimEventGateway eventGateway,
+                         ClaimReferenceFactory referenceFactory) {
         this.catalog = catalog;
         this.eventGateway = eventGateway;
+        this.referenceFactory = referenceFactory;
     }
 
     @Transactional
     public ClaimRecord file(FileClaimCommand command) {
         ClaimRecord draft = new ClaimRecord(
-                nextReference(),
+                referenceFactory.create(),
                 command.policyNumber(),
                 command.claimantName(),
                 command.type(),
@@ -87,11 +89,4 @@ public class ClaimWorkflow {
         }
     }
 
-    private String nextReference() {
-        String reference;
-        do {
-            reference = "CLM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        } while (catalog.existsByClaimNumber(reference));
-        return reference;
-    }
 }
