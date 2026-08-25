@@ -9,9 +9,12 @@ import java.math.BigDecimal;
 
 /** Validated body accepted by POST /api/claims. */
 public record FileClaimCommand(
-        @NotBlank String policyNumber,
-        @NotBlank String claimantName,
-        @NotNull CoverageCategory type,
-        @Size(max = 2000) String description,
-        @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount) {
+        @NotBlank(message = "policy number is required") String policyNumber,
+        @NotBlank(message = "claimant name is required") String claimantName,
+        @NotNull(message = "claim type is required") CoverageCategory type,
+        @Size(max = 2000, message = "description must not exceed 2000 characters")
+        String description,
+        @NotNull(message = "amount is required")
+        @DecimalMin(value = "0.0", inclusive = false, message = "amount must be greater than zero")
+        BigDecimal amount) {
 }
