@@ -53,6 +53,9 @@ class ClaimsRestApiTest {
         client.perform(post("/api/claims").contentType(MediaType.APPLICATION_JSON).content(payload))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value(
+                        "claimantName: claimant name is required; "
+                                + "policyNumber: policy number is required"))
                 .andExpect(jsonPath("$.path").value("/api/claims"));
     }
 

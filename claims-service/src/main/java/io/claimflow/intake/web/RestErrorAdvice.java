@@ -4,6 +4,7 @@ import io.claimflow.contracts.http.ErrorEnvelope;
 import io.claimflow.intake.errors.ClaimTransitionException;
 import io.claimflow.intake.errors.UnknownClaimException;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class RestErrorAdvice {
     public ResponseEntity<ErrorEnvelope> invalidBody(
             MethodArgumentNotValidException failure, HttpServletRequest request) {
         String details = failure.getBindingResult().getFieldErrors().stream()
+                .sorted(Comparator.comparing(field -> field.getField()))
                 .map(field -> field.getField() + ": " + field.getDefaultMessage())
                 .collect(Collectors.joining("; "));
         return respond(HttpStatus.BAD_REQUEST, details, request);
