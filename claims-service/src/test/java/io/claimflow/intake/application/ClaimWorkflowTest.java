@@ -19,6 +19,7 @@ import io.claimflow.intake.messaging.ClaimEventGateway;
 import io.claimflow.intake.model.ClaimRecord;
 import io.claimflow.intake.persistence.ClaimCatalog;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,6 +96,18 @@ class ClaimWorkflowTest {
         assertThat(result.state()).isEqualTo(ProcessingState.REJECTED);
         assertThat(result.declineReason()).isEqualTo("Missing documents");
         verify(eventGateway).dispatch(any(ClaimDeclined.class));
+    }
+
+    @Test
+    void browseDelegatesStatusFilterToCatalog() {
+        ClaimRecord submitted = sampleClaim();
+        when(catalog.findByStatusOrderByCreatedAtDesc(ProcessingState.SUBMITTED))
+                .thenReturn(List.of(submitted));
+
+        List<ClaimRecord> results = workflow.browse(ProcessingState.SUBMITTED);
+
+        assertThat(results).containsExactly(submitted);
+        verify(catalog).findByStatusOrderByCreatedAtDesc(ProcessingState.SUBMITTED);
     }
 
     private ClaimRecord sampleClaim() {
