@@ -1,5 +1,6 @@
 package io.claimflow.intake.messaging;
 
+import io.claimflow.contracts.events.ClaimEventTopics;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +14,17 @@ public class ClaimTopicConfiguration {
 
     @Bean
     NewTopic filedClaimsTopic() {
-        return singlePartitionTopic(ClaimTopics.FILED);
+        return singlePartitionTopic(ClaimEventTopics.FILED);
     }
 
     @Bean
     NewTopic acceptedClaimsTopic() {
-        return singlePartitionTopic(ClaimTopics.ACCEPTED);
+        return singlePartitionTopic(ClaimEventTopics.ACCEPTED);
     }
 
     @Bean
     NewTopic declinedClaimsTopic() {
-        return singlePartitionTopic(ClaimTopics.DECLINED);
+        return singlePartitionTopic(ClaimEventTopics.DECLINED);
     }
 
     private NewTopic singlePartitionTopic(String name) {

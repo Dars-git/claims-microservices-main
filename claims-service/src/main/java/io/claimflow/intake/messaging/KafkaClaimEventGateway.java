@@ -1,6 +1,7 @@
 package io.claimflow.intake.messaging;
 
 import io.claimflow.contracts.events.ClaimActivity;
+import io.claimflow.contracts.events.ClaimEventTopics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -22,7 +23,7 @@ public class KafkaClaimEventGateway implements ClaimEventGateway {
 
     @Override
     public void dispatch(ClaimActivity activity) {
-        String destination = ClaimTopics.destinationFor(activity);
+        String destination = ClaimEventTopics.destinationFor(activity);
         LOGGER.info("Dispatching {} to {} for claim {}",
                 activity.getClass().getSimpleName(), destination, activity.claimNumber());
         kafka.send(destination, activity.claimNumber(), activity);

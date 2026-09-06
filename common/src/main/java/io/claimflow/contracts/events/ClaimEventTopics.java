@@ -1,18 +1,13 @@
-package io.claimflow.intake.messaging;
+package io.claimflow.contracts.events;
 
-import io.claimflow.contracts.events.ClaimAccepted;
-import io.claimflow.contracts.events.ClaimActivity;
-import io.claimflow.contracts.events.ClaimDeclined;
-import io.claimflow.contracts.events.ClaimFiled;
-
-/** Kafka topic contract and event routing. */
-public final class ClaimTopics {
+/** Shared Kafka destinations used by event producers and consumers. */
+public final class ClaimEventTopics {
 
     public static final String FILED = "claim.submitted";
     public static final String ACCEPTED = "claim.approved";
     public static final String DECLINED = "claim.rejected";
 
-    private ClaimTopics() {
+    private ClaimEventTopics() {
     }
 
     public static String destinationFor(ClaimActivity activity) {

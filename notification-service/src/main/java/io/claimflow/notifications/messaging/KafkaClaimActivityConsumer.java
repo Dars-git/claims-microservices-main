@@ -2,6 +2,7 @@ package io.claimflow.notifications.messaging;
 
 import io.claimflow.contracts.events.ClaimAccepted;
 import io.claimflow.contracts.events.ClaimDeclined;
+import io.claimflow.contracts.events.ClaimEventTopics;
 import io.claimflow.contracts.events.ClaimFiled;
 import io.claimflow.notifications.application.NotificationProjector;
 import org.springframework.context.annotation.Profile;
@@ -19,17 +20,17 @@ public class KafkaClaimActivityConsumer {
         this.projector = projector;
     }
 
-    @KafkaListener(topics = "claim.submitted", groupId = "notification-service")
+    @KafkaListener(topics = ClaimEventTopics.FILED, groupId = "notification-service")
     public void claimFiled(ClaimFiled activity) {
         projector.project(activity);
     }
 
-    @KafkaListener(topics = "claim.approved", groupId = "notification-service")
+    @KafkaListener(topics = ClaimEventTopics.ACCEPTED, groupId = "notification-service")
     public void claimAccepted(ClaimAccepted activity) {
         projector.project(activity);
     }
 
-    @KafkaListener(topics = "claim.rejected", groupId = "notification-service")
+    @KafkaListener(topics = ClaimEventTopics.DECLINED, groupId = "notification-service")
     public void claimDeclined(ClaimDeclined activity) {
         projector.project(activity);
     }
