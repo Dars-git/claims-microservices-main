@@ -14,4 +14,12 @@
     <name>ClaimFlow Contracts</name>
     <description>Transport-neutral domain events, enums, and HTTP error contracts</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
