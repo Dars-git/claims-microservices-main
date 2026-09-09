@@ -26,6 +26,17 @@ public class KafkaClaimEventGateway implements ClaimEventGateway {
         String destination = ClaimEventTopics.destinationFor(activity);
         LOGGER.info("Dispatching {} to {} for claim {}",
                 activity.getClass().getSimpleName(), destination, activity.claimNumber());
-        kafka.send(destination, activity.claimNumber(), activity);
+        kafka.send(destination, activity.claimNumber(), activity)
+                .whenComplete((result, failure) -> {
+                    if (failure != null) {
+                        LOGGER.error("Kafka delivery failed for claim {} on {}",
+                                activity.claimNumber(), destination, failure);
+                        return;
+                    }
+                    LOGGER.debug("Kafka acknowledged claim {} on partition {} at offset {}",
+                            activity.claimNumber(),
+                            result.getRecordMetadata().partition(),
+                            result.getRecordMetadata().offset());
+                });
     }
 }
