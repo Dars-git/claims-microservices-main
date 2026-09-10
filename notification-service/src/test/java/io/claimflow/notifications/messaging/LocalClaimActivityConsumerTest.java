@@ -8,6 +8,7 @@ import io.claimflow.contracts.events.ClaimFiled;
 import io.claimflow.contracts.model.CoverageCategory;
 import io.claimflow.notifications.application.NotificationLedger;
 import io.claimflow.notifications.model.NotificationEntry;
+import io.claimflow.notifications.model.NotificationKind;
 import java.math.BigDecimal;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class LocalClaimActivityConsumerTest {
         eventBus.publishEvent(new ClaimDeclined(2L, "CLM-2", "missing docs", Instant.now()));
 
         assertThat(ledger.snapshot()).extracting(NotificationEntry::type)
-                .containsExactly("CLAIM_SUBMITTED", "CLAIM_APPROVED", "CLAIM_REJECTED");
+                .containsExactly(
+                        NotificationKind.CLAIM_SUBMITTED,
+                        NotificationKind.CLAIM_APPROVED,
+                        NotificationKind.CLAIM_REJECTED);
     }
 }
