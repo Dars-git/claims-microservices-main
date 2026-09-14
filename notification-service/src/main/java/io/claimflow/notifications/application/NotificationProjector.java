@@ -4,7 +4,6 @@ import io.claimflow.contracts.events.ClaimAccepted;
 import io.claimflow.contracts.events.ClaimDeclined;
 import io.claimflow.contracts.events.ClaimFiled;
 import io.claimflow.notifications.model.NotificationEntry;
-import io.claimflow.notifications.model.NotificationKind;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,22 +21,19 @@ public class NotificationProjector {
     }
 
     public void project(ClaimFiled activity) {
-        append(NotificationKind.CLAIM_SUBMITTED, activity.claimNumber(),
-                "Claim " + activity.claimNumber() + " submitted by " + activity.claimantName());
+        append(NotificationEntry.submitted(activity.claimNumber(), activity.claimantName()));
     }
 
     public void project(ClaimAccepted activity) {
-        append(NotificationKind.CLAIM_APPROVED, activity.claimNumber(),
-                "Claim " + activity.claimNumber() + " was approved");
+        append(NotificationEntry.approved(activity.claimNumber()));
     }
 
     public void project(ClaimDeclined activity) {
-        append(NotificationKind.CLAIM_REJECTED, activity.claimNumber(),
-                "Claim " + activity.claimNumber() + " was rejected: " + activity.reason());
+        append(NotificationEntry.rejected(activity.claimNumber(), activity.reason()));
     }
 
-    private void append(NotificationKind kind, String reference, String text) {
-        LOGGER.info("Notification [{}] {}", kind, text);
-        ledger.append(NotificationEntry.capture(kind, reference, text));
+    private void append(NotificationEntry entry) {
+        LOGGER.info("Notification [{}] {}", entry.type(), entry.message());
+        ledger.append(entry);
     }
 }
