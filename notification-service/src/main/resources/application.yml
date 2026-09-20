@@ -3,7 +3,7 @@ spring:
     name: claim-notification-service
 
 server:
-  port: 8081
+  port: ${NOTIFICATION_SERVER_PORT:8081}
 
 logging:
   level:
