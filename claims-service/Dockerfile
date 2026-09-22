@@ -12,4 +12,5 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /workspace/claims-service/target/claim-intake-service-2.0.0.jar app.jar
 EXPOSE 8080
+USER 10001:10001
 ENTRYPOINT ["java", "-jar", "app.jar"]

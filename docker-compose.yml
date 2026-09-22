@@ -36,6 +36,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: kafka
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    restart: unless-stopped
 
   notification-service:
     build:
@@ -47,3 +48,4 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: kafka
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    restart: unless-stopped
