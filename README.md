@@ -203,7 +203,19 @@ notification-service/src/main/java/io/claimflow/notifications/
 ## Configuration
 
 The default H2 database and service ports are defined in each module's `application.yml`.
-Kafka-specific serialization is isolated in `application-kafka.yml`. Override the broker address
-with `KAFKA_BOOTSTRAP_SERVERS`; it defaults to `localhost:9092` outside Docker.
+Kafka-specific serialization is isolated in `application-kafka.yml`. Runtime settings can be
+overridden without editing configuration files:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `CLAIMS_SERVER_PORT` | `8080` | Claim intake HTTP port |
+| `NOTIFICATION_SERVER_PORT` | `8081` | Notification HTTP port |
+| `CLAIMS_DB_URL` | In-memory H2 URL | Claim JDBC connection |
+| `CLAIMS_DB_USERNAME` | `sa` | Claim database user |
+| `CLAIMS_DB_PASSWORD` | empty | Claim database password |
+| `KAFKA_BOOTSTRAP_SERVERS` | `localhost:9092` | Kafka broker addresses |
+
+Invalid query filters, malformed JSON, unsupported enum values, validation failures, missing
+claims, and forbidden lifecycle transitions all use the documented error envelope.
 
 The GitHub Actions workflow runs `mvn -B verify` on JDK 17 for pushes and pull requests to `main`.
